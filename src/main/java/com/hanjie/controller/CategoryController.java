@@ -4,6 +4,7 @@ import com.hanjie.common.http.AxiosResult;
 import com.hanjie.controller.base.BaseController;
 import com.hanjie.domin.entity.Category;
 
+import com.hanjie.domin.vo.CategoryVo;
 import com.hanjie.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +20,11 @@ public class CategoryController extends BaseController {
     private final CategoryService categoryService;
 
     /**
-     *查询所有
+     *查询所有 树状列表
      */
     @GetMapping
-    public AxiosResult<List<Category>> list(){
-        List<Category> list = categoryService.list();
+    public AxiosResult<List<CategoryVo>> list(){
+        List<CategoryVo> list = categoryService.buildTree();
         return AxiosResult.success(list);
     }
 
@@ -52,11 +53,32 @@ public class CategoryController extends BaseController {
     }
 
     /**
-     * 删除
+     * 删除  以及删除下面的子项
      */
     @DeleteMapping("{id}")
     public AxiosResult<Void> delete(@PathVariable  Long id){
-        return toAxios(categoryService.deleteById(id));
+
+        int row=categoryService.deleSelfAndChildrenById(id);
+        return toAxios(row);
+    }
+
+
+    /**
+     * 返回联机选择框    信息
+     */
+    @GetMapping("selectTree")
+    public AxiosResult<List<CategoryVo>> getSelectTree(){
+        List<CategoryVo> list= categoryService.getSelectTree();
+        return AxiosResult.success(list);
+    }
+
+    /**
+     * 通过父id拿到 分类
+     */
+    @GetMapping("findByPid")
+    public AxiosResult<List<CategoryVo>> findByPid(long parentId){
+        List<CategoryVo> list=categoryService.getByParentId(parentId);
+        return AxiosResult.success(list);
     }
 
 

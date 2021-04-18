@@ -1,8 +1,12 @@
 package com.hanjie.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.hanjie.common.http.AxiosResult;
+import com.hanjie.common.page.PageResult;
 import com.hanjie.controller.base.BaseController;
+import com.hanjie.domin.criteria.GoodCriteria;
 import com.hanjie.domin.entity.Good;
+import com.hanjie.domin.vo.GoodVo;
 import com.hanjie.service.GoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +25,10 @@ public class GoodController extends BaseController {
      *查询所有
      */
     @GetMapping
-    public AxiosResult<List<Good>> list(){
-        List<Good> list = goodService.list();
-        return AxiosResult.success(list);
+    public AxiosResult<PageResult<GoodVo>> list(GoodCriteria goodCriteria){
+        List<GoodVo> list=goodService.searchPage(goodCriteria);
+        PageInfo<GoodVo> pageInfo=new PageInfo<>(list);
+        return AxiosResult.success(new PageResult<GoodVo>(pageInfo.getTotal(),list));
     }
 
     /**

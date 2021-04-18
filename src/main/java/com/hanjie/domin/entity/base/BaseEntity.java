@@ -22,24 +22,39 @@ public class BaseEntity implements Serializable  {
     /**
      * 创建者
      */
-    @JsonIgnore
+
     private Long createBy;
 
     /**
      * 创建时间
      */
-    @JsonIgnore
+
     private LocalDateTime createTime;
 
     /**
      * 修改者
      */
-    @JsonIgnore
+
     private Long updateBy;
 
     /**
      * 修改时间
      */
-    @JsonIgnore
+
     private LocalDateTime updateTime;
+
+
+    /**
+     * 创建时间和修改时间的调用
+     */
+    public void setData() {
+        if (id == null) {
+            //添加功能
+            this.createBy = 1L;//创建人
+            this.createTime = LocalDateTime.now();//当前创建时间
+        } else {
+            this.updateBy = 2L;//修改人
+            this.updateTime = LocalDateTime.now();//当前修改时间
+        }
+    }
 }

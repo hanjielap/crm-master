@@ -1,6 +1,7 @@
 package com.hanjie.service.base.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.hanjie.common.reflect.ReflectionUtils;
 import com.hanjie.mapper.base.MyMapper;
 import com.hanjie.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,17 @@ public class BaseServiceimpl<T> implements BaseService<T>{
 
     @Override
     public int save(T t) {
+        //新增的时候需要添加创建人以及创建时间
+        //根据工具类的反射 调用
+        ReflectionUtils.invokeMethod(t, "setData", null, null);
         return myMapper.insert(t);
     }
 
     @Override
     public int update(T t) {
+        //新增的时候需要添加修改人以及修改时间
+        //根据工具类的反射 调用
+        ReflectionUtils.invokeMethod(t, "setData", null, null);
         return myMapper.updateById(t);
     }
 
