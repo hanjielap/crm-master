@@ -20,6 +20,7 @@ public class TreeUtils {
     public static <T> List<T> bulidTree(List<T> list) {
         //通过反射拿到一级分类
         List<T> root = list.stream().filter(item -> (Long) ReflectionUtils.getFieldValue(item, "parentId") == 0).collect(Collectors.toList());
+        list.removeAll(root);
         root.forEach(item->{
             getChildren(item,list);
         });
@@ -35,6 +36,7 @@ public class TreeUtils {
         if (hasChildren(t,list)){
             List<T> collect = list.stream().filter(item -> (Long) ReflectionUtils.getFieldValue(item, "parentId") == (Long) ReflectionUtils.getFieldValue(t, "id")).collect(Collectors.toList());
             ReflectionUtils.setFieldValue(t,"children",collect);
+            list.removeAll(collect);
             //遍历二级
             collect.forEach(item1->getChildren(item1,list));
 

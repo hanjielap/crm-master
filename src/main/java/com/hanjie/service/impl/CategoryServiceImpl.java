@@ -1,10 +1,12 @@
 package com.hanjie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hanjie.common.util.TreeUtils;
 import com.hanjie.domin.entity.Category;
 import com.hanjie.domin.vo.CategoryVo;
 import com.hanjie.mapper.CategoryMapper;
+import com.hanjie.mapper.base.MyMapper;
 import com.hanjie.service.CategoryService;
 import com.hanjie.service.base.impl.BaseServiceimpl;
 import com.hanjie.transfer.CategoryTransfer;
@@ -41,8 +43,10 @@ public class CategoryServiceImpl extends BaseServiceimpl<Category> implements Ca
     //新增下拉框选择信息
     @Override
     public List<CategoryVo> getSelectTree() {
+        //一级
         List<Category> first = categoryMapper.getByCategoryLevel(1);
         List<CategoryVo> categoryVos = categoryTransfer.toVO(first);
+        //二级
         List<Category> second = categoryMapper.getByCategoryLevel(2);
         List<CategoryVo> categoryVos1 = categoryTransfer.toVO(second);
         categoryVos.forEach(categoryVo -> {

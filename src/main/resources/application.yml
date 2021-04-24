@@ -8,14 +8,33 @@ spring:
     url: jdbc:mysql://localhost:3306/crm?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+    #配置邮箱发送的地址
+  mail:
+    #邮箱发送服务器
+    host: smtp.163.com
+    username: lap191019@163.com
+    password: TLXPSJSNWXYVVZIA
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 400MB
+  task:
+    scheduling:   ##Scheduled调度的线程数量
+      pool:
+        size: 50
+    execution:    ##异步任务线程池的数据  @Async的线程池数量
+      pool:
+        core-size: 8
 #配置日志
 logging:
   level:
     com:
       hanjie: debug
-#日志输出路径
+  #日志输出路径
   file:
     name: D:\\crm.log
+
+
 
 
 #当mapper不同一个目录加载 mapper配置文件

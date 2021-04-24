@@ -10,6 +10,10 @@ public enum EnumStatus {
     CODE_ERROR(22223, "验证码不正确"),
     CODE_SHIXIAO(22224, "验证码已失效"),
     NO_ACTIVE(22225, "用户未激活"),
+    FORM_VALICATOR_ERROR(33233, "表单校验失败"),
+    IMG_NO_UPLOAD(2223344, "上传的不是一个图片"),
+    IMG_NO(22331, "上传格式不正确"),
+    IMG_NO_MAX(22332, "上传文件太大"),
     ;
 
     private int status;
