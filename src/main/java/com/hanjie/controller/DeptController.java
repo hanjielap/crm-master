@@ -1,7 +1,11 @@
 package com.hanjie.controller;
 
 import com.hanjie.common.http.AxiosResult;
+import com.hanjie.common.page.PageResult;
+import com.hanjie.common.perm.HasPerm;
+import com.hanjie.common.util.TreeUtils;
 import com.hanjie.controller.base.BaseController;
+import com.hanjie.domin.criteria.DeptCriteria;
 import com.hanjie.domin.entity.Dept;
 
 import com.hanjie.domin.vo.DeptVo;
@@ -9,7 +13,10 @@ import com.hanjie.service.DeptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("dept")
@@ -23,24 +30,31 @@ public class DeptController extends BaseController {
      * 查询所有
      */
     @GetMapping
-    public AxiosResult<List<Dept>> list() {
-        List<Dept> list = deptService.list();
-        return AxiosResult.success(list);
+    public AxiosResult<PageResult<DeptVo>> list(DeptCriteria deptCriteria) {
+        PageResult<DeptVo> pageResult = deptService.searchPage(deptCriteria);
+        return AxiosResult.success(pageResult);
     }
 
     /**
      * 根据id查询
      */
     @GetMapping("{id}")
-    public AxiosResult<Dept> findById(@PathVariable Long id) {
+    public AxiosResult<Map<String, Object>> findById(@PathVariable Long id) {
         Dept byId = deptService.getById(id);
-        return AxiosResult.success(byId);
+        List<DeptVo> parents = deptService.getSuperByParent(byId.getParentId(), new ArrayList<>());
+        //构建Tree
+        List<DeptVo> deptVos = TreeUtils.bulidTree(parents);
+        Map<String, Object> map = new HashMap<>();
+        map.put("obj", byId);
+        map.put("elements", deptVos);
+        return AxiosResult.success(map);
     }
 
     /**
      * 添加
      */
     @PostMapping
+    @HasPerm(perm = "dept:add")
     public AxiosResult<Void> add(@RequestBody Dept Dept) {
         return toAxios(deptService.save(Dept));
     }
@@ -49,6 +63,7 @@ public class DeptController extends BaseController {
      * 修改
      */
     @PutMapping
+    @HasPerm(perm = "dept:edit")
     public AxiosResult<Void> update(@RequestBody Dept Dept) {
         return toAxios(deptService.update(Dept));
     }
@@ -57,8 +72,9 @@ public class DeptController extends BaseController {
      * 删除
      */
     @DeleteMapping("{id}")
-    public AxiosResult<Void> delete(@PathVariable Long id) {
-        return toAxios(deptService.deleteById(id));
+    @HasPerm(perm = "dept:delete")
+    public AxiosResult<Void> deleteById(@PathVariable Long id) {
+        return toAxios(deptService.deleteSelfAndChildren(id));
     }
 
 
@@ -79,6 +95,15 @@ public class DeptController extends BaseController {
     @GetMapping("{id}/children")
     public AxiosResult<List<DeptVo>> getChildrenById(@PathVariable long id) {
         return AxiosResult.success(deptService.getChildrenById(id));
+    }
+
+
+
+    @GetMapping("findParentByDeptId/{id}")
+    public AxiosResult<List<DeptVo>> findParentById(@PathVariable Long id) {
+        List<DeptVo> list = deptService.getDeptVoTree(id, new ArrayList<>());
+        List<DeptVo> deptVos = TreeUtils.bulidTree(list);
+        return AxiosResult.success(deptVos);
     }
 
 }

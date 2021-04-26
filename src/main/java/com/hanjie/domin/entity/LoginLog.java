@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.hanjie.domin.entity.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,9 +20,13 @@ import java.time.LocalDateTime;
  * @since 2021-04-21
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @TableName("log_login_log")
-public class LoginLog extends BaseEntity implements Serializable {
+public class LoginLog  {
+
+    /**
+     * 日志文件
+     */
 
     private static final long serialVersionUID = 1L;
 

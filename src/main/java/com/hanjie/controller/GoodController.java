@@ -3,6 +3,7 @@ package com.hanjie.controller;
 import com.github.pagehelper.PageInfo;
 import com.hanjie.common.http.AxiosResult;
 import com.hanjie.common.page.PageResult;
+import com.hanjie.common.perm.HasPerm;
 import com.hanjie.controller.base.BaseController;
 import com.hanjie.domin.criteria.GoodCriteria;
 import com.hanjie.domin.entity.Good;
@@ -43,6 +44,7 @@ public class GoodController extends BaseController {
      *添加
      */
     @PostMapping
+    @HasPerm(perm = "good:add")
     public AxiosResult<Void> add(@RequestBody  Good Good){
         return toAxios(goodService.save(Good));
     }
@@ -51,6 +53,7 @@ public class GoodController extends BaseController {
      * 修改
      */
     @PutMapping
+    @HasPerm(perm = "good:edit")
     public AxiosResult<Void> update(@RequestBody  Good Good){
         return toAxios(goodService.update(Good));
     }
@@ -59,8 +62,16 @@ public class GoodController extends BaseController {
      * 删除
      */
     @DeleteMapping("{id}")
+    @HasPerm(perm = "good:delete")
     public AxiosResult<Void> delete(@PathVariable  Long id){
         return toAxios(goodService.deleteById(id));
+    }
+
+
+    @DeleteMapping("batch/{ids}")
+    @HasPerm(perm = "good:batch")
+    public AxiosResult<Void> batchDeleteByIds(@PathVariable List<Long> ids) {
+        return toAxios(goodService.batchDeleteByIds(ids));
     }
 
 

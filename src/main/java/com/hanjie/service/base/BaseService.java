@@ -55,4 +55,5 @@ public interface BaseService<T> {
      */
     int batchDeleteByIds(List<Long> ids);
 
+
 }

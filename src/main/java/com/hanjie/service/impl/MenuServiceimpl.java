@@ -6,8 +6,13 @@ import com.github.pagehelper.PageInfo;
 import com.hanjie.common.page.PageResult;
 import com.hanjie.domin.criteria.MenuCriteria;
 import com.hanjie.domin.entity.Admin;
+import com.hanjie.domin.entity.AdminRole;
 import com.hanjie.domin.entity.Menu;
+import com.hanjie.domin.entity.RoleMenu;
 import com.hanjie.domin.vo.MenuVo;
+import com.hanjie.mapper.AdminRoleMapper;
+import com.hanjie.mapper.MenuMapper;
+import com.hanjie.mapper.RoleMenuMapper;
 import com.hanjie.service.AdminService;
 import com.hanjie.service.MenuService;
 import com.hanjie.service.base.impl.BaseServiceimpl;
@@ -18,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +32,13 @@ import java.util.stream.Collectors;
 public class MenuServiceimpl extends BaseServiceimpl<Menu> implements MenuService {
 
     private final MenuTransfer menuTransfer;
+    private final AdminRoleMapper adminRoleMapper;
+
+
+    private final RoleMenuMapper roleMenuMapper;
+
+
+    private final MenuMapper menuMapper;
 
     /**
      *获得所有的菜单  分页情况
@@ -74,6 +87,22 @@ public class MenuServiceimpl extends BaseServiceimpl<Menu> implements MenuServic
         rootVo.forEach(item->getChildren(item,menuVos));
         return rootVo;
 
+    }
+
+    /**
+     * 中间表 来拿id
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Menu> getMenusByAdminId(Long adminId) {
+        //根据员工表找到对应的角色id
+        List<Long> roleIds = adminRoleMapper.selectList(new QueryWrapper<AdminRole>().lambda().eq(AdminRole::getAdminId, adminId)).stream().map(AdminRole::getRoleId).collect(Collectors.toList());
+        //根据角色id拿到对应的权限id
+        Set<Long> menuIds = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().lambda().in(RoleMenu::getRoleId, roleIds)).stream().map(RoleMenu::getMenuId).collect(Collectors.toSet());
+        //根据权限ids 封装到对象 返回
+        List<Menu> menus = menuMapper.selectBatchIds(menuIds);
+        return menus;
     }
 
 

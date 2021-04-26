@@ -32,4 +32,10 @@ public class AsyncManager {
         threadPoolTaskExecutor.execute(runnable);
     }
 
+
+    //停止线程运行
+    public void shutDown() {
+        threadPoolTaskExecutor.shutdown();
+    }
+
 }

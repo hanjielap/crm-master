@@ -29,24 +29,25 @@ public class BaseEntity implements Serializable  {
      * 创建者
      */
 
+    @JsonIgnore
     private Long createBy;
 
     /**
      * 创建时间
      */
-
+    @JsonIgnore
     private LocalDateTime createTime;
 
     /**
      * 修改者
      */
-
+    @JsonIgnore
     private Long updateBy;
 
     /**
      * 修改时间
      */
-
+    @JsonIgnore
     private LocalDateTime updateTime;
 
 

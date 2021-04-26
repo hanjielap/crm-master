@@ -6,6 +6,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 
 public class AsyncFactory {
 
+
+    /**
+     *定时发送邮件
+     */
     public static Runnable sendEmail(String email,String content){
         Runnable runnable=()->{
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();

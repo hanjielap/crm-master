@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.hanjie.common.http.AxiosResult;
 import com.hanjie.common.page.PageResult;
+import com.hanjie.common.perm.HasPerm;
 import com.hanjie.controller.base.BaseController;
 import com.hanjie.domin.criteria.BrandCriteria;
 import com.hanjie.domin.entity.Brand;
@@ -63,6 +64,7 @@ public class BrandController extends BaseController {
      *添加
      */
     @PostMapping
+    @HasPerm(perm = "brand:add")
     public AxiosResult<Void> add(@RequestBody  Brand Brand){
         return toAxios(brandService.save(Brand));
     }
@@ -71,6 +73,7 @@ public class BrandController extends BaseController {
      * 修改
      */
     @PutMapping
+    @HasPerm(perm = "brand:edit")
     public AxiosResult<Void> update(@RequestBody  Brand Brand){
         return toAxios(brandService.update(Brand));
     }
@@ -79,6 +82,7 @@ public class BrandController extends BaseController {
      * 删除
      */
     @DeleteMapping("{id}")
+    @HasPerm(perm = "brand:delete")
     public AxiosResult<Void> delete(@PathVariable  Long id){
         return toAxios(brandService.deleteById(id));
     }
@@ -89,6 +93,7 @@ public class BrandController extends BaseController {
      */
 
     @DeleteMapping("batch/{ids}")
+    @HasPerm(perm = "brand:batch")
     public AxiosResult<Void> batchDelete(@PathVariable List<Long> ids){
         return toAxios(brandService.batchDeleteByIds(ids));
     }

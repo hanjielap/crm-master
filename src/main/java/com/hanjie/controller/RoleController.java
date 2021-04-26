@@ -2,6 +2,7 @@ package com.hanjie.controller;
 
 import com.hanjie.common.http.AxiosResult;
 import com.hanjie.common.page.PageResult;
+import com.hanjie.common.perm.HasPerm;
 import com.hanjie.controller.base.BaseController;
 import com.hanjie.domin.criteria.RoleCriteria;
 import com.hanjie.domin.entity.Role;
@@ -59,6 +60,7 @@ public class RoleController extends BaseController {
      *添加
      */
     @PostMapping
+    @HasPerm(perm = "role:add")
     public AxiosResult<Void> add(@RequestBody  Role Role){
         return toAxios(roleService.save(Role));
     }
@@ -67,6 +69,7 @@ public class RoleController extends BaseController {
      * 修改
      */
     @PutMapping
+    @HasPerm(perm = "role:edit")
     public AxiosResult<Void> update(@RequestBody  Role Role){
         return toAxios(roleService.update(Role));
     }
@@ -75,6 +78,7 @@ public class RoleController extends BaseController {
      * 删除
      */
     @DeleteMapping("{id}")
+    @HasPerm(perm = "role:delete")
     public AxiosResult<Void> delete(@PathVariable  Long id){
         return toAxios(roleService.deleteById(id));
     }
@@ -85,6 +89,7 @@ public class RoleController extends BaseController {
      */
 
     @DeleteMapping("batch/{ids}")
+    @HasPerm(perm = "role:batch")
     public AxiosResult<Void> batchDelete(@PathVariable List<Long> ids){
         return toAxios(roleService.batchDeleteByIds(ids));
     }

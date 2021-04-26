@@ -6,6 +6,8 @@ import com.hanjie.domin.entity.Admin;
 import com.hanjie.domin.vo.AdminVo;
 import com.hanjie.service.base.BaseService;
 
+import java.util.Map;
+
 public interface AdminService extends BaseService<Admin> {
 
     /**
@@ -33,4 +35,15 @@ public interface AdminService extends BaseService<Admin> {
      */
     int updateAdminAndRoles(Admin admin);
 
+    /**
+     * 登录功能 通过过用户名查询用户
+     */
+    Admin doLogin(String username);
+    /**
+     * 获得用户信息
+     * 菜单 本身信息 按钮级别权限
+     *
+     * @return
+     */
+    Map<String, Object> getAdminInfo();
 }

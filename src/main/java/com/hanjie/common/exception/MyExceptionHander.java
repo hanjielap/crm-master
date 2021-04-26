@@ -37,4 +37,12 @@ public class MyExceptionHander {
         return AxiosResult.error(EnumStatus.FORM_VALICATOR_ERROR,map);
     }
 
+    /**
+     * 处理无权限的异常
+     */
+    @ExceptionHandler(PermException.class)
+    public AxiosResult<Void> handler(PermException e) {
+        return AxiosResult.error(e.getEnumStatus());
+    }
+
 }

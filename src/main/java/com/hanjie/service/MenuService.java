@@ -23,4 +23,11 @@ public interface MenuService extends BaseService<Menu> {
      * @return
      */
     List<MenuVo> getAllMenuTree();
+
+    /**
+     * 根据员工id拿到中间表的id
+     * @param adminId
+     * @return
+     */
+    List<Menu> getMenusByAdminId(Long adminId);
 }

@@ -3,6 +3,7 @@ package com.hanjie.controller;
 import com.alibaba.excel.EasyExcel;
 import com.hanjie.common.http.AxiosResult;
 import com.hanjie.common.page.PageResult;
+import com.hanjie.common.perm.HasPerm;
 import com.hanjie.common.util.TreeUtils;
 import com.hanjie.common.valid.addGroup;
 import com.hanjie.controller.base.BaseController;
@@ -68,6 +69,7 @@ public class AdminController extends BaseController {
      * 添加
      */
     @PostMapping
+    @HasPerm(perm = "admin:add")
     public AxiosResult<Void> add(@Validated(addGroup.class) @RequestBody Admin admin) {
 /*        @Bean
         public BCryptPasswordEncoder passwordEncoder() {
@@ -99,6 +101,7 @@ public class AdminController extends BaseController {
      * 修改
      */
     @PutMapping
+    @HasPerm(perm = "admin:edit")
     public AxiosResult<Void> update(@RequestBody Admin admin) {
         //修改员工信息以及角色信息
         return toAxios(adminService.updateAdminAndRoles(admin));
@@ -108,6 +111,7 @@ public class AdminController extends BaseController {
      * 删除
      */
     @DeleteMapping("{id}")
+    @HasPerm(perm = "admin:delete")
     public AxiosResult<Void> delete(@PathVariable Long id) {
         return toAxios(adminService.deleteById(id));
     }
@@ -117,6 +121,7 @@ public class AdminController extends BaseController {
      * 批量删除
      */
     @DeleteMapping("batch/{ids}")
+    @HasPerm(perm = "admin:batch")
     public AxiosResult<Void> batch(@PathVariable List<Long> ids) {
         return toAxios(adminService.batchDeleteByIds(ids));
     }
@@ -141,6 +146,7 @@ public class AdminController extends BaseController {
     private final AdminExcelTransfer adminExcelTransfer;
 
     @GetMapping("export")
+    //@HasPerm(perm = "admin:export")
     public ResponseEntity<byte[]> export() throws UnsupportedEncodingException {
 
         //拿到数据

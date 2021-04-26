@@ -1,6 +1,7 @@
 package com.hanjie.controller;
 
 import com.hanjie.common.http.AxiosResult;
+import com.hanjie.common.perm.HasPerm;
 import com.hanjie.controller.base.BaseController;
 import com.hanjie.domin.entity.Category;
 
@@ -40,6 +41,7 @@ public class CategoryController extends BaseController {
      *添加
      */
     @PostMapping
+    @HasPerm(perm = "category:add")
     public AxiosResult<Void> add(@RequestBody  Category Category){
         return toAxios(categoryService.save(Category));
     }
@@ -48,6 +50,7 @@ public class CategoryController extends BaseController {
      * 修改
      */
     @PutMapping
+    @HasPerm(perm = "category:edit")
     public AxiosResult<Void> update(@RequestBody  Category Category){
         return toAxios(categoryService.update(Category));
     }
